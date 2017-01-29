@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <div class=container-fluid>
+  <div class="col-sm-3 col-sm-offset-7">
+    <p></p>
+    <div class="panel panel-primary">
+      <div class="panel-heading">Inicia sesión</div>
+      <div class="panel-body">
+        <span class="glyphicon glyphicon-off" aria-hidden="true">
+        {% if user.is_authenticated %}
+          ¡Hola {{ user.username }}!
+          <a href="{% url 'logout' %}">logout</a>
+        {% else %}
+          <a href="{% url 'login' %}">login</a><a href="{% url 'posts:new_user' %}"> registrate</a>
+        {% endif %}
+      </div>
+    </div>
+
+
+
+    </div>
+    <div class="col-sm-4 col-sm-offset-2">
+      <h1>Mi blog</h1>
+    </div>
+  </div>
+  
+	<div class="col-sm-8 col-sm-offset-2">
+	<form method='GET' action=''>
+		<input type='text' name='q' placeholder='Introduzca palabras clave' value='{{ request.GET.q }}'/>
+		<input type='submit' value='Buscar'/>
+    {% if user.is_staff or request.user.is_superuser %}
+      <a href="{% url "posts:create" %}" class="btn btn-success" role="button">Crear</a>
+    {% endif %}
+	</form>
+  </div>
+
+
+  <div class="col-sm-8 col-sm-offset-2">
+	{% for obj in object_list %}
+	<div class="row">
+		 <div class="col-sm-12">
+    		<div class="thumbnail">
+      			<div class="caption">
+        			<h3>{{obj.title}}<small> {{obj.timestamp|timesince}}</small></h3>
+        			{% if not obj.user.get_full_name %}
+        				<p><span class="glyphicon glyphicon-user" aria-hidden="true">Autor: {{ obj.user }}</p>
+        			{% endif %}
+        			{% if obj.user.get_full_name %}
+        				<p><span class="glyphicon glyphicon-user" aria-hidden="true">Autor: {{ obj.user.get_full_name }}</p>
+        			{% endif %}
+       				<p align="justify"> {{obj.content|truncatewords:100|linebreaks}}</p>
+        			<a href="{{ obj.get_absolute_url }}" class="btn btn-primary" role="button">Ver</a>
+              {% if user.is_staff or request.user.is_superuser %}
+        			 <a href="{{ obj.get_absolute_url_edit }}" class="btn btn-success" role="button">Editar</a>
+        			 <a href="{{ obj.get_absolute_url_delete }}" class="btn btn-danger" role="button">Eliminar</a>
+              {% endif %}
+      			</div>
+    		</div>
+  		</div>
+  	</div>
+	{% endfor %}
+
+
+	<div class="pagination">
+    	<span class="step-links">
+        	{% if object_list.has_previous %}
+            	<a href="?page={{ object_list.previous_page_number }}&q={{ request.GET.q }}">previous</a>
+        	{% endif %}
+
+        	<span class="current">
+            	Page {{ object_list.number }} of {{ object_list.paginator.num_pages }}.
+        	</span>
+
+        	{% if object_list.has_next %}
+            	<a href="?page={{ object_list.next_page_number }}&q={{ request.GET.q }}">next</a>
+        	{% endif %}
+    	</span>
+	</div>
+	</div>
+	
+{% endblock content %}

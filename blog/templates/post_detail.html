@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+
+{% block head_title %}{{ instance.title }} | {{ block.super }}{% endblock head_title %}
+
+{% block content %}
+<div class='col-sm-6 col-sm-offset-3'>
+	<h1>{{title}} </br><small>{{instance.timestamp}}</br></small></h1>
+	{% if not instance.user.get_full_name %}
+        <p><span class="glyphicon glyphicon-user" aria-hidden="true">Autor: {{ instance.user }}</p>
+    {% endif %}
+    {% if instance.user.get_full_name %}
+        <p><span class="glyphicon glyphicon-user" aria-hidden="true">Autor: {{ instance.user.get_full_name }}</p>
+    {% endif %}
+	{% if instance.image %}
+	<img src='{{ instance.image.url }}' class='img-responsive' />
+	<p></p>
+	{% endif %}
+	<div class="thumbnail">
+		<div class="caption">
+			<p align="justify">{{ instance.content|linebreaks}}</br></p>
+		</div>
+	</div>
+</div>
+<div class='col-sm-4 col-sm-offset-8'>
+	<p>Última actualización:{{instance.updated}}</p>
+
+</div>
+<div>
+	<p></p>
+	<a href="{% url "posts:list" %}" class="btn btn-warning" role="button"><span class="glyphicon glyphicon-share-alt" aria-hidden="true">Volver</a>
+</div>
+
+<div class='col-sm-8 col-sm-offset-3'>
+	<h1>Comentarios:</h1>
+
+	<div class="col-sm-8 ">
+	<form method='POST' action=''>{% csrf_token %}
+	{{ form.as_p}}
+	<input type='submit' value='Comenta' />
+	</form>
+	</div>
+</div>
+
+<div class='col-sm-6 col-sm-offset-3'>
+	{% for com in commentary_list %}
+	<div class="row">
+		<div class="thumbnail">
+			<div class="caption">
+				<p align="left"><span class="glyphicon glyphicon-user" aria-hidden="true">{{ com.user }} comentó en {{ com.timestamp }}</p>
+				<p>{{ com.content }}</p>
+			</div>
+		</div>
+	</div>
+
+	{% endfor %}
+</div>
+{% endblock content %}
