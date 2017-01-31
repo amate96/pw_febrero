@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h1>Vista principal</h1>
+
+ <div class=container-fluid>
+  <div class="col-sm-3 col-sm-offset-7">
+    <p></p>
+    <div class="panel panel-primary">
+      <div class="panel-heading">Inicia sesión</div>
+      <div class="panel-body">
+        <span class="glyphicon glyphicon-off" aria-hidden="true">
+        {% if user.is_authenticated %}
+          ¡Hola {{ user.username }}!
+          <a href="{% url 'logout' %}">logout</a>
+        {% else %}
+          <a href="{% url 'login' %}">login</a>
+        {% endif %}
+      </div>
+    </div>
+   </div>
+  </div>
+
+
+<a href="{% url 'sistema:circun_list' %}">Ejercicio 2</a>
+{% endblock content %}
