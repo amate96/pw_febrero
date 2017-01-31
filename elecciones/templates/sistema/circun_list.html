@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h1>Lista de circunscripciones</h1>
+
+<div class="col-sm-8 col-sm-offset-2">
+{% if request.user.is_staff or request.user.is_superuser %}
+      <a href="{% url "sistema:circun_create" %}" class="btn btn-success" role="button">Crear</a>
+    {% endif %}
+{% for obj in object_list %}
+<div class="row">
+	<div class="col-sm-12">
+    	<div class="thumbnail">
+      		<div class="caption">
+        			<h3>{{obj.nombre}}</h3> <a href="{% url 'sistema:mesa_list' id=obj.pk %}">Ver mesas</a>
+ 					<p>{{obj.num_esca}}</p>
+ 					<a href="{{ obj.get_absolute_url }}" class="btn btn-primary" role="button">Ver</a>
+ 					<a href="{{ obj.get_absolute_url_delete }}" class="btn btn-danger" role="button">Eliminar</a>
+ 					<a href="{{ obj.get_absolute_url_update }}" class="btn btn-warning" role="button">Editar</a>
+ 			</div>
+ 		</div>
+ 	</div>
+ </div>
+
+
+
+{% endfor %}
+
+{% endblock content %}

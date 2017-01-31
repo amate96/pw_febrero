@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+
+{% block content %}
+<a href="{% url "sistema:circun_list" %}" class="btn btn-warning" role="button"><span class="glyphicon glyphicon-share-alt" aria-hidden="true">Volver</a>
+
+<h3>{{object.nombre}}</h3>
+<p>{{object.num_esca}}</p>
+
+{% endblock content %}
